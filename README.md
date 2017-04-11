@@ -12,8 +12,8 @@ Try not to delete items, rather one should mark it as cancelled.
 Legend
 --------
 
-    [ ] - Not started
- * TODO not started past initial documentation or stubs.
+ * [ ] - Not started
+ ** TODO not started past initial documentation or stubs.
 
     [/] - In Progress
  * TODO in progress, some or all code is done, but bugs still may remain. If code is undocumented, it must be documented before reaching Finished status.
