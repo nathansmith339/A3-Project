@@ -33,14 +33,14 @@ Critically Necessary
 ---------------------
 These tasks must be done to consider being a working version. Try to make these short and document stubs in code to explain structure, etc.
 
-[  ] Symbol Class: Type, *Rule, (Explicit Rule)
-[  ] Rule Class: LHS, RHS[array] //(CAPS NONT, lower term)
-[  ] Node Class: symbol, kids, kidcnt
-[  ] SERIALIZE token list (pretty much done)
-[  ] Feed tokens to parser
-[  ] Token Class: Name, type
-[  ] LRE (avoid recursive infloop)
-[  ] Left factoring (pretty much done)
+    [  ] Symbol Class: Type, *Rule, (Explicit Rule)
+    [  ] Rule Class: LHS, RHS[array] //(CAPS NONT, lower term)
+    [  ] Node Class: symbol, kids, kidcnt
+    [  ] SERIALIZE token list (pretty much done)
+    [  ] Feed tokens to parser
+    [  ] Token Class: Name, type
+    [  ] LRE (avoid recursive infloop)
+    [  ] Left factoring (pretty much done)
 
 
 ----------
@@ -48,17 +48,17 @@ Bug Fixes
 ----------
 List any bugs with priority number instead:
 
-[x] - Bug squashed!
-[1] - High priority, detrimental to program function
-[2] - Moderate priority, potentially affects program function in certain circumstances.
-[3] - Low priority, usually visual things like capitalization/spacing errors, output formatting
+    [x] - Bug squashed!
+    [1] - High priority, detrimental to program function
+    [2] - Moderate priority, potentially affects program function in certain circumstances.
+    [3] - Low priority, usually visual things like capitalization/spacing errors, output formatting
 
 
 BUGS:
-[x] - Example
+    [x] - Example
 
 ---------
 Wishlist
 ---------
 
-[ ] - Example
+    [ ] - Example
