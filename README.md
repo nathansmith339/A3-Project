@@ -11,20 +11,16 @@ Try not to delete items, rather one should mark it as cancelled.
 --------
 Legend
 --------
-    [ ] - Not started
-   > TODO not started past initial documentation or stubs.
-
-    [/] - In Progress
- * TODO in progress, some or all code is done, but bugs still may remain. If code is undocumented, it must be documented before reaching Finished status.
-
-    [x] - Finished
- * Code is complete, documented, free of known bugs.
-
-    [%] - Issue (specify underneath)
- * Some sort of miscellaneous issue with the TODO, specify underneath as best you can
-
-    [$] - Cancelled
- * TODO cancelled, adding a reason will help remember why it was cancelled in the first place.
+[ ] - Not started
+  - TODO not started past initial documentation or stubs.
+[/] - In Progress
+  - TODO in progress, some or all code is done, but bugs still may remain. If code is undocumented, it must be documented before reaching Finished status.
+[x] - Finished
+  - Code is complete, documented, free of known bugs.
+[%] - Issue (specify underneath)
+  - Some sort of miscellaneous issue with the TODO, specify underneath as best you can
+[$] - Cancelled
+  - TODO cancelled, adding a reason will help remember why it was cancelled in the first place.
 
 
 ---------------------
