@@ -27,14 +27,14 @@ Critically Necessary
 ---------------------
 These tasks must be done to consider being a working version. Try to make these short and document stubs in code to explain structure, etc.
 
-[  ] Symbol Class: Type, \*Rule, (Explicit Rule)
-[  ] Rule Class: LHS, RHS[array] //(CAPS NONT, lower term)
-[  ] Node Class: symbol, kids, kidcnt
-    [  ] SERIALIZE token list (pretty much done)
-    [  ] Feed tokens to parser
-    [  ] Token Class: Name, type
-    [  ] LRE (avoid recursive infloop)
-    [  ] Left factoring (pretty much done)
+- [ ] Symbol Class: Type, \*Rule, (Explicit Rule)
+- [ ] Rule Class: LHS, RHS[array] //(CAPS NONT, lower term)
+- [ ] Node Class: \*symbol, kids[], kidcnt
+- [ ] SERIALIZE token list (pretty much done)
+- [ ] Feed tokens to parser
+- [ ] Token Class: Name, type
+- [ ] LRE (avoid recursive infloop)
+- [ ] Left factoring (pretty much done)
 
 
 ----------
@@ -43,17 +43,19 @@ Bug Fixes
 List any bugs with priority number included:
 
 - [x] - Bug squashed!
-- [ ] - Existing bug with priority and description
+- [ ] Existing bug with priority and description
   * [3] High priority, detrimental to program function
-  * [2] - Moderate priority, potentially affects program function in certain circumstances.
-  * [3] - Low priority, usually visual things like capitalization/spacing errors, output formatting
+  * [2] - Moderate priority, potentially affects program function in certain circumstances.
+  * [1] - Low priority, usually visual things like capitalization/spacing errors, output formatting
 
 
 BUGS:
-    [x] - [3] First line of output has an extra space
+- [ ] [3] (example) First line of output has an extra space
+  - extra detail about it
 
 ---------
 Wishlist
 ---------
-
-    [ ] - Example
+- [ ] Example item
+  - details about it
+- [ ] Another item
