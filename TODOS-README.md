@@ -20,7 +20,7 @@ Feel free to add items as things come up or refactoring/splitting is necessary.
 
 
 # Critically Necessary TODOs
-These tasks must be done to consider being a working version. Try to make these short and document stubs in code to explain structure, etc.
+These tasks must be done to consider being a working version. Try to make these short and document stubs in code to explain structure, etc. These are in no particular order.
 
 - [ ] Symbol Class: Type, \*Rule, (Explicit Rule)
 - [ ] Rule Class: LHS, RHS[array] //(CAPS NONT, lower term)
@@ -30,6 +30,7 @@ These tasks must be done to consider being a working version. Try to make these 
 - [ ] Token Class: Name, type
 - [ ] LRE (avoid recursive infloop)
 - [ ] Left factoring (pretty much done)
+- [ ] Error marking
 
 
 
