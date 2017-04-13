@@ -6,15 +6,12 @@ Feel free to add items as things come up or refactoring/splitting is necessary.
 **Try not to delete items, rather one should mark it as cancelled.**
 
 
-
-
+# Legend & General Info
 --------
-Legend
---------
-- [ ] - Not started
-  * TODO not started past initial documentation or stubs.
-- [x] - Finished
-  * Code is complete, documented, free of known bugs.
+- [ ] Not started
+  - TODO not started past initial documentation or stubs.
+- [x] Finished
+  - Code is complete, documented, free of known bugs.
 
 - For issues, specify underneath.
   * Some sort of miscellaneous issue with the TODO, specify underneath as best you can
@@ -22,8 +19,8 @@ Legend
   * If a task is cancelled, adding a reason will help remember why it was cancelled in the first place.
 
 
----------------------
-Critically Necessary
+
+# Critically Necessary TODOs
 ---------------------
 These tasks must be done to consider being a working version. Try to make these short and document stubs in code to explain structure, etc.
 
@@ -37,8 +34,8 @@ These tasks must be done to consider being a working version. Try to make these 
 - [ ] Left factoring (pretty much done)
 
 
-----------
-Bug Fixes
+
+# Bug Fixes
 ----------
 List any bugs with priority number included:
 
@@ -49,12 +46,12 @@ List any bugs with priority number included:
   * [1] - Low priority, usually visual things like capitalization/spacing errors, output formatting
 
 
-BUGS:
+## BUGS:
 - [ ] [3] (example) First line of output has an extra space
   - extra detail about it
 
----------
-Wishlist
+
+# Wishlist
 ---------
 - [ ] Example item
   - details about it
