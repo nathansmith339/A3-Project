@@ -7,7 +7,6 @@ Feel free to add items as things come up or refactoring/splitting is necessary.
 
 
 # Legend & General Info
---------
 - [ ] Not started
   - TODO not started past initial documentation or stubs.
 - [x] Finished
@@ -21,7 +20,6 @@ Feel free to add items as things come up or refactoring/splitting is necessary.
 
 
 # Critically Necessary TODOs
----------------------
 These tasks must be done to consider being a working version. Try to make these short and document stubs in code to explain structure, etc.
 
 - [ ] Symbol Class: Type, \*Rule, (Explicit Rule)
@@ -36,7 +34,6 @@ These tasks must be done to consider being a working version. Try to make these 
 
 
 # Bug Fixes
-----------
 List any bugs with priority number included:
 
 - [x] - Bug squashed!
@@ -52,7 +49,6 @@ List any bugs with priority number included:
 
 
 # Wishlist
----------
 - [ ] Example item
   - details about it
 - [ ] Another item
