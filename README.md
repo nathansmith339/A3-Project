@@ -17,9 +17,9 @@ Legend
   * Code is complete, documented, free of known bugs.
 
 - For issues, specify underneath.
-* Some sort of miscellaneous issue with the TODO, specify underneath as best you can
+  * Some sort of miscellaneous issue with the TODO, specify underneath as best you can
 - Cancelled Items
-If a task is cancelled, adding a reason will help remember why it was cancelled in the first place.
+  * If a task is cancelled, adding a reason will help remember why it was cancelled in the first place.
 
 
 ---------------------
