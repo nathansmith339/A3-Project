@@ -3,7 +3,7 @@ CPSC 323 Lexer, Parser, etc.
 TODOs:
 Feel free to add items as things come up or refactoring/splitting is necessary.
 
-Try not to delete items, rather one should mark it as cancelled.
+**Try not to delete items, rather one should mark it as cancelled.**
 
 
 
