@@ -7,11 +7,10 @@ Feel free to add items as things come up or refactoring/splitting is necessary.
 
 - **Try not to delete items, rather one should mark it as cancelled.**
   - ~~use strikethru to indicate it~~
-    - Done by doing this
+    - Use tilde to strikethru: ~text~
     ```
-    \~text\~
-    ``` 
     ~text~
+    ``` 
 
 
 
