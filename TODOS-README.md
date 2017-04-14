@@ -2,10 +2,17 @@
 CPSC 323 Lexer, Parser, etc.
 TODOs:
 Feel free to add items as things come up or refactoring/splitting is necessary.
+[Markdown Cheatsheet by Adam P.](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+
 
 - **Try not to delete items, rather one should mark it as cancelled.**
   - ~~use strikethru to indicate it~~
-    - Done by doing this: \~text\~ = ~text~
+    - Done by doing this
+    ```
+    \~text\~
+    ``` 
+    ~text~
+
 
 
 # Legend & General Info
