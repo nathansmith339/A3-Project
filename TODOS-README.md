@@ -22,13 +22,16 @@ Feel free to add items as things come up or refactoring/splitting is necessary.
 # Critically Necessary TODOs
 These tasks must be done to consider being a working version. Try to make these short and document stubs in code to explain structure, etc. These are in no particular order.
 
+- [x] Stubs for Symbol, Rule, Node, Token classes
 - [ ] Symbol Class: Type, \*Rule, (Explicit Rule)
 - [ ] Rule Class: LHS, RHS[array] //(CAPS NONT, lower term)
 - [ ] Node Class: \*symbol, kids[], kidcnt
+- [ ] Token Class: Name, type
+
 - [ ] SERIALIZE token list (pretty much done)
   - convert lexer output to serialized list for use
 - [ ] Feed tokens to parser
-- [ ] Token Class: Name, type
+
 - [ ] LRE (avoid recursive infloop)
 - [ ] Left factoring (pretty much done)
 - [ ] Error marking
