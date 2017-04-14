@@ -111,10 +111,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="A3LexerMain.cpp" />
-    <ClCompile Include="Node.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="source.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="Rule.h" />
+    <ClInclude Include="Symbol.h" />
+    <ClInclude Include="Token.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
