@@ -26,6 +26,7 @@ These tasks must be done to consider being a working version. Try to make these 
 - [ ] Rule Class: LHS, RHS[array] //(CAPS NONT, lower term)
 - [ ] Node Class: \*symbol, kids[], kidcnt
 - [ ] SERIALIZE token list (pretty much done)
+  - convert lexer output to serialized list for use
 - [ ] Feed tokens to parser
 - [ ] Token Class: Name, type
 - [ ] LRE (avoid recursive infloop)
