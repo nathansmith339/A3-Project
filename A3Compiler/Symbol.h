@@ -1,4 +1,5 @@
 // Symbol stub
+// Symbol is an object that holds a rule pointer and can determine type of TERM or NONT
 /* TODOs:
 	Parameterized constructor
 	Getters/Setters
@@ -16,13 +17,24 @@
 #include "Rule.h"
 
 class Symbol {
+public:
 	Symbol();
 	~Symbol();
 	// TODO: Parameterized constructor
 
-	int m_type;	// filled w/ TERM or NONT
-	Rule* m_rule;
+	// Members
+	int mType;		// TERM (0) or NONT (1)
+	Rule *mRule;	// Specific rule
 	// maybe have copy of RHS here?
+	// char *mRHScpy[100];
+
+	// TODO: Getters and Setters
+	
+	int getType();
+	void printName();
+
+	// TODO: Utility Functions
+	
 };
 
 
@@ -30,3 +42,16 @@ class Symbol {
 Symbol::Symbol() { }
 
 Symbol::~Symbol() { }
+
+
+int Symbol::getType()
+{
+	// Terminal is 0, Non-Terminal is 1
+	return mType;
+}
+
+void Symbol::printName()
+{
+	// Prints what name this symbol is to cout
+	cout << mRule->mLHS;
+}
