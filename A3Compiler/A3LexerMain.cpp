@@ -122,8 +122,11 @@ int main()
 
 
 DBG:	if (tokenCount > 0)
+		{
+			cout << "Token Type Name :: Token Type (numerical) :: Token Value (if applicable)\n";
 			for (int i = 0; i < tokenCount; i++)
-				cout << TokenList[i]->mTokName << " :: " << TokenList[i]->mType << endl;
+				cout << TokenList[i]->mTokName << " :: " << TokenList[i]->mType << " :: " << TokenList[i]->mValue << endl;
+		}
 
 	// "pause" console to see results
 	printf("\nPress any key to exit.\n");
@@ -445,12 +448,12 @@ int lex()
 		}
 
 		CurrentToken->mValue = lexeme;		// puts found lexeme value into token
-		CurrentToken->mTokName = "float";	// swapped to "int" if type is int
+		CurrentToken->mTokName = "t_float";	// swapped to "int" if type is int
 
 		// Type identification: int or float
 		if (CurrentToken->mType != t_float)
 		{
-			CurrentToken->mTokName = "int";
+			CurrentToken->mTokName = "t_int";
 			printf("(:token %d int :str \"%s\")\n", lineCount, lexeme);
 		}
 		else
@@ -487,7 +490,8 @@ int lex()
 				addChar();
 				getChar();
 			}
-			CurrentToken->mTokName = lexeme;
+			CurrentToken->mValue = lexeme;
+			CurrentToken->mTokName = "t_string";
 			printf("(:token %d string :str \"%s\")\n", lineCount, lexeme);
 			getChar(); // ignore last '"'
 			return 1;
