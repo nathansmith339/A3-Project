@@ -1,10 +1,21 @@
 // A3LexerMain.cpp
-// Authors:			Nathan Smith and Jonathan Boe
-// Description:		A lexical analyzer that asks for a file name (no spaces) and performs a lexical analysis.
-//					While the analysis is done, the results are output to the console in a parenthesized format.
+// Authors:					Nathan Smith and Jonathan Boe
+// 
+// Description:				A lexical analyzer that asks for a file name (no spaces) and performs a lexical analysis.
+//								While the analysis is done, the results are output to the console in a parenthesized format.
+//
+//
+//
+// Developer Notes:
+//		- When using printf, remember that %s looks for c-string type, std::string must be converted by use of (str).c_str() for printf to read it
+//		- Token index on line is not implemented.
+//		- Try using labels for debug statements, they'll be easier to track down
+//
+
 
 #include <iostream>
 #include <fstream>
+#include <string>
 #include "Token.h"
 using namespace std;
 
@@ -24,15 +35,20 @@ const int LEXEME_SIZE = 100;	// determines size of lexeme
 int lineCount;					// count of number of lines in source file
 char lexeme[LEXEME_SIZE];		// lexeme length is 99 max
 char lexLength;					// temp. holds the length of a particular lexeme
-char tokenName[15];				// keeps track of a token's type for later
 char peekedChar;				// holds a peeked character
 int peekClass;					// keeps track of peekedChar's type
 char nextChar;					// holds the character in question
 int charClass;					// keeps track of nextChar's "type"
-int tokenType;					// keeps track of the type of token found
+Token *CurrentToken;			// object that holds the current token being used
+Token *TokenList[1000];			// array of tokens, 1000 is more than plenty
+int tokenCount = 0;				// count of tokens for use in TokenList
+
 ifstream input_file;
 char fileName[100] = "source.txt";
 char errorString[100];
+
+
+
 
 
 /// Used for charClass and peekClass
@@ -49,36 +65,65 @@ int main()
 	lineCount = 1;
 	int lex_ret; // returned value from lexer, success or error
 
-	// ask for file
-	cout << "Enter input filename (no spaces)\n>";
-	cin.getline(fileName, 100);
-
+	
+	printf("Attempting to open default file: %s...\t", fileName);
+	
 	// open file
 	input_file.open(fileName);
+	
+	// failure to open default file
 	if (input_file.fail())
 	{
-		printf("Error opening file. Filename of '%s' doesn't exist.\nExiting.\n", fileName);
-	}
-	else
-	{
-		printf("(:lang A3\n");
-		getChar(); // grab first char to start off
-		do
+		printf("Error opening file. Filename of '%s' doesn't exist. Try entering filename.\n", fileName);
+		
+		// ask for file
+		cout << "Enter input filename (no spaces)\n>";
+		cin.getline(fileName, 100);
+		
+		// try again
+		input_file.open(fileName);
+		
+		// okay, this isn't working
+		if (input_file.fail())
 		{
-			// processing
-			
-			lex_ret = lex();
-			if (lex_ret == 0) // unexpected symbol error
-			{
-				printf("FAILURE: Unexpected symbol '%s' found on line %d.\n", errorString, lineCount);
-				break;		// abort LA
-			}
-		} while (nextChar != EOF);
-		if (lex_ret == 1)
-		{
-			printf(")\nProgram passed lexical analysis\n");
+			printf("Error opening file. Filename of '%s' doesn't exist.\nExiting.\n", fileName);
+			printf("\nPress any key to exit.\n");
+			cin.ignore();
+			return 0;
 		}
 	}
+
+
+	printf("Successfully opened file!\n");
+	printf("(:lang A3\n");
+	getChar(); // grab first char to start off
+	do
+	{
+		// processing
+			
+		CurrentToken = new Token();
+			
+		lex_ret = lex();
+		if (lex_ret == 0) // unexpected symbol error
+		{
+			printf("FAILURE: Unexpected symbol '%s' found on line %d.\n", errorString, lineCount);
+			break;		// abort LA
+		}
+
+		// add token to list (if necessary)
+		if (CurrentToken->mTokName != "error")
+			TokenList[tokenCount++] = CurrentToken;
+
+	} while (nextChar != EOF);
+	if (lex_ret == 1)
+	{
+		printf(")\nProgram passed lexical analysis\n");
+	}
+
+
+DBG:	if (tokenCount > 0)
+			for (int i = 0; i < tokenCount; i++)
+				cout << TokenList[i]->mTokName << " :: " << TokenList[i]->mType << endl;
 
 	// "pause" console to see results
 	printf("\nPress any key to exit.\n");
@@ -86,6 +131,15 @@ int main()
 
 	// close file
 	input_file.close();
+
+	// TODO: pass to parser here
+
+	// end parsing
+
+	// delete dynamic pointers in array
+	for (int i = 0; i < tokenCount; i++)
+		delete TokenList[i];
+
 	return 0;
 }
 
@@ -124,22 +178,22 @@ int lookup(char ch)
 			// it's a comment
 			return comment;
 		}
-		strncpy_s(tokenName, "slash", 15);
+		CurrentToken->mTokName = "slash";
 		return slash;
 		break;
 
 	case '"':
 		return t_string;
-		strncpy_s(tokenName, "string", 15);
+		CurrentToken->mTokName = "string";
 		break;
 
 	case ',':
-		strncpy_s(tokenName, "comma", 15);
+		CurrentToken->mTokName = "comma";
 		return comma;
 		break;
 
 	case ';':
-		strncpy_s(tokenName, "semi", 15);
+		CurrentToken->mTokName = "semi";
 		return semi;
 		break;
 
@@ -148,17 +202,17 @@ int lookup(char ch)
 		peekNext();
 		if (peekedChar == '=')
 		{
-			strncpy_s(tokenName, "ople", 15);
+			CurrentToken->mTokName = "ople";
 			return ople;
 		}
 		else if (peekedChar == '<')
 		{
-			strncpy_s(tokenName, "opshl", 15);
+			CurrentToken->mTokName = "opshl";
 			return opshl;
 		}
 		else
 		{
-			strncpy_s(tokenName, "angle1", 15);
+			CurrentToken->mTokName = "angle1";
 			return angle1;
 		}
 		break;
@@ -168,68 +222,68 @@ int lookup(char ch)
 		peekNext();
 		if (peekedChar == '=')
 		{
-			strncpy_s(tokenName, "opge", 15);
+			CurrentToken->mTokName = "opge";
 			return opge;
 		}
 		else if (peekedChar == '>')
 		{
-			strncpy_s(tokenName, "opshr", 15);
+			CurrentToken->mTokName = "opshr";
 			return opshr;
 		}
 		else
 		{
-			strncpy_s(tokenName, "angle2", 15);
+			CurrentToken->mTokName = "angle2";
 			return angle2;
 		}
 		break;
 
 	case '{':
-		strncpy_s(tokenName, "brace1", 15);
+		CurrentToken->mTokName = "brace1";
 		return brace1;
 		break;
 
 	case '}':
-		strncpy_s(tokenName, "brace2", 15);
+		CurrentToken->mTokName = "brace2";
 		return brace2;
 		break;
 
 	case '[':
-		strncpy_s(tokenName, "bracket1", 15);
+		CurrentToken->mTokName = "bracket1";
 		return bracket1;
 		break;
 
 	case ']':
-		strncpy_s(tokenName, "bracket2", 15);
+		CurrentToken->mTokName = "bracket2";
 		return bracket2;
 		break;
 
 	case '(':
-		strncpy_s(tokenName, "parens1", 15);
+		CurrentToken->mTokName = "parens1";
 		return parens1;
 		break;
 
 	case ')':
-		strncpy_s(tokenName, "parens2", 15);
+		CurrentToken->mTokName = "parens2";
 		return parens2;
 		break;
 
 	case '*':
-		strncpy_s(tokenName, "aster", 15);
+		CurrentToken->mTokName = "aster";
 		return aster;
 		break;
 
 	case '^':
-		strncpy_s(tokenName, "caret", 15);
+		CurrentToken->mTokName = "caret";
 		return caret;
 		break;
 
 	case ':':
-		strncpy_s(tokenName, "colon", 15);
+		CurrentToken->mTokName = "colon";
 		return colon;
 		break;
 
 	case '.':
-		strncpy_s(tokenName, "dot", 15);
+		CurrentToken->mTokName = "dot";
 		return dot;
 		break;
 
@@ -238,10 +292,10 @@ int lookup(char ch)
 		peekNext();
 		if (peekedChar == '=')
 		{
-			strncpy_s(tokenName, "opeq", 15);
+			CurrentToken->mTokName = "opeq";
 			return opeq;
 		}
-		strncpy_s(tokenName, "equal", 15);
+		CurrentToken->mTokName = "equal";
 		return equal;
 		break;
 
@@ -250,15 +304,15 @@ int lookup(char ch)
 		peekNext();
 		if (peekedChar == '>')
 		{
-			strncpy_s(tokenName, "oparrow", 15);
+			CurrentToken->mTokName = "oparrow";
 			return oparrow;
 		}
-		strncpy_s(tokenName, "minus", 15);
+		CurrentToken->mTokName = "minus";
 		return minus;
 		break;
 
 	case '+':
-		strncpy_s(tokenName, "plus", 15);
+		CurrentToken->mTokName = "plus";
 		return plus;
 		break;
 
@@ -266,7 +320,7 @@ int lookup(char ch)
 		peekNext();
 		if (peekedChar == '=')
 		{
-			strncpy_s(tokenName, "opne", 15);
+			CurrentToken->mTokName = "opne";
 			return opne;
 		}
 		else
@@ -316,6 +370,7 @@ int lex()
 		// is this a keyword?
 		if (isKWD())
 		{
+			CurrentToken->mTokName = string("kwd").append(lexeme);  // similar to: "kwd" + "prog"
 			printf("(:token %d kwd%s)\n", lineCount, lexeme);
 		}
 		else	// an identifier
@@ -327,9 +382,13 @@ int lex()
 				errorString[1] = 0;
 				return 0;
 			}
+			CurrentToken->mTokName = "ident";
+			CurrentToken->mValue = lexeme;
 			printf("(:token %d ident :str \"%s\")\n", lineCount, lexeme);
 		}
 		getChar();
+
+		
 		return 1;
 		break;
 
@@ -337,7 +396,7 @@ int lex()
 		// possibilities: t_int, t_float
 		lexLength = 0;
 		float_point = false;
-		tokenType = t_int;
+		CurrentToken->mType = t_int;
 		while (charClass == DIGIT || lookup(nextChar) == dot)
 		{
 			// ensure only digits/dots are added
@@ -347,7 +406,7 @@ int lex()
 				{
 					if (float_point == false)	// determine if token is int or float
 					{
-						tokenType = t_float;	// add floating point and toggle
+						CurrentToken->mType = t_float;	// add floating point and toggle
 						addChar();
 						getChar();
 						float_point = true;
@@ -355,7 +414,7 @@ int lex()
 					}
 					else						// look pal, you can't have two floating points
 					{
-						tokenType = error;
+						CurrentToken->mType = error;
 						errorString[0] = nextChar;
 						errorString[1] = 0;
 						return 0;
@@ -385,8 +444,13 @@ int lex()
 			getChar();
 		}
 
-		if (tokenType != t_float)
+		CurrentToken->mValue = lexeme;		// puts found lexeme value into token
+		CurrentToken->mTokName = "float";	// swapped to "int" if type is int
+
+		// Type identification: int or float
+		if (CurrentToken->mType != t_float)
 		{
+			CurrentToken->mTokName = "int";
 			printf("(:token %d int :str \"%s\")\n", lineCount, lexeme);
 		}
 		else
@@ -398,15 +462,15 @@ int lex()
 		
 	case UNKNOWN:
 		// possibilities: comment, t_string, comma, semi, delimiter, punct, other
-		tokenType = lookup(nextChar);
-		if (tokenType == error)
+		CurrentToken->mType = lookup(nextChar);
+		if (CurrentToken->mType == error)
 		{
 			errorString[0] = nextChar;
 			errorString[1] = 0;
 			return 0;
 		}
 
-		switch (tokenType)
+		switch (CurrentToken->mType)
 		{
 		case comment:
 			// skip over comment
@@ -423,6 +487,7 @@ int lex()
 				addChar();
 				getChar();
 			}
+			CurrentToken->mTokName = lexeme;
 			printf("(:token %d string :str \"%s\")\n", lineCount, lexeme);
 			getChar(); // ignore last '"'
 			return 1;
@@ -530,13 +595,17 @@ int lex()
 		if (isEnd(peekedChar) || isalnum(peekedChar) || peekClass == EOF || peekClass == SPC)
 		{
 			//lookup(nextChar);
-			if (tokenType != t_string)
-				printf("(:token %d %s)\n", lineCount, tokenName);
+			if (CurrentToken->mType != t_string)
+			{
+				// This is a special case to check before confirming lexeme, we have to update the lexeme now
+				strncpy_s(lexeme, CurrentToken->mTokName.c_str(), _TRUNCATE);
+				printf("(:token %d %s)\n", lineCount, CurrentToken->mTokName.c_str());
+			}
 		}
 		else
 		{
 			// if end of token isn't there, there's something wrong
-			tokenType = error;
+			CurrentToken->mType = error;
 			errorString[0] = nextChar;
 			errorString[1] = 0;
 			return 0;
@@ -549,7 +618,7 @@ int lex()
 
 bool isKWD()
 {
-	tokenType = error;
+	CurrentToken->mType = error;
 	
 	
 	if (lexLength > 6) // keywords aren't longer than 6 characters
@@ -558,24 +627,24 @@ bool isKWD()
 	{
 		// keywords: prog, main, fcn, class, float, int, string, if, elseif, else, while, input, print, new, return
 		// Note: !strncmp() means that it DOES match
-		if (!strncmp(lexeme, "prog", 10))		tokenType = kwdprog;
-		if (!strncmp(lexeme, "main", 10))		tokenType = kwdmain;
-		if (!strncmp(lexeme, "fcn", 10))		tokenType = kwdfcn;
-		if (!strncmp(lexeme, "class", 10))		tokenType = kwdclass;
-		if (!strncmp(lexeme, "float", 10))		tokenType = kwdfloat;
-		if (!strncmp(lexeme, "int", 10))		tokenType = kwdint;
-		if (!strncmp(lexeme, "string", 10))		tokenType = kwdstring;
-		if (!strncmp(lexeme, "if", 10))			tokenType = kwdif;
-		if (!strncmp(lexeme, "elseif", 10))		tokenType = kwdelseif;
-		if (!strncmp(lexeme, "else", 10))		tokenType = kwdelse;
-		if (!strncmp(lexeme, "while", 10))		tokenType = kwdwhile;
-		if (!strncmp(lexeme, "input", 10))		tokenType = kwdinput;
-		if (!strncmp(lexeme, "print", 10))		tokenType = kwdprint;
-		if (!strncmp(lexeme, "new", 10))		tokenType = kwdnew;
-		if (!strncmp(lexeme, "return", 10))		tokenType = kwdreturn;
+		if (!strncmp(lexeme, "prog", 10))		CurrentToken->mType = kwdprog;
+		if (!strncmp(lexeme, "main", 10))		CurrentToken->mType = kwdmain;
+		if (!strncmp(lexeme, "fcn", 10))		CurrentToken->mType = kwdfcn;
+		if (!strncmp(lexeme, "class", 10))		CurrentToken->mType = kwdclass;
+		if (!strncmp(lexeme, "float", 10))		CurrentToken->mType = kwdfloat;
+		if (!strncmp(lexeme, "int", 10))		CurrentToken->mType = kwdint;
+		if (!strncmp(lexeme, "string", 10))		CurrentToken->mType = kwdstring;
+		if (!strncmp(lexeme, "if", 10))			CurrentToken->mType = kwdif;
+		if (!strncmp(lexeme, "elseif", 10))		CurrentToken->mType = kwdelseif;
+		if (!strncmp(lexeme, "else", 10))		CurrentToken->mType = kwdelse;
+		if (!strncmp(lexeme, "while", 10))		CurrentToken->mType = kwdwhile;
+		if (!strncmp(lexeme, "input", 10))		CurrentToken->mType = kwdinput;
+		if (!strncmp(lexeme, "print", 10))		CurrentToken->mType = kwdprint;
+		if (!strncmp(lexeme, "new", 10))		CurrentToken->mType = kwdnew;
+		if (!strncmp(lexeme, "return", 10))		CurrentToken->mType = kwdreturn;
 		
 		// did any of these match?
-		if (tokenType != error)
+		if (CurrentToken->mType != error)
 			return true;
 	}
 	return false;
@@ -630,15 +699,15 @@ void skipBlanks()
 bool isEnd(char ch)
 {
 	// Designed to "beautify" the lexer's if statements
-	// The lookup below replaces tokenName inadvertantly, and so we keep the old one
-	char old_tokname[40];
-	strncpy_s(old_tokname, tokenName, 40);
+	// The lookup below replaces CurrentToken->mTokName inadvertantly, and so we keep the old one
+	string old_tokname;
+	old_tokname = CurrentToken->mTokName;
 
 	// get char type
 	int _thisCharType = lookup(ch);
 	
 	// replace old token name
-	strncpy_s(tokenName, old_tokname, 40);
+	CurrentToken->mTokName = old_tokname;
 
 	// space
 	if (isspace(ch))

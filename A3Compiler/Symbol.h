@@ -31,7 +31,6 @@ public:
 	// TODO: Getters and Setters
 	
 	int getType();
-	void printName();
 
 	// TODO: Utility Functions
 	
@@ -48,10 +47,4 @@ int Symbol::getType()
 {
 	// Terminal is 0, Non-Terminal is 1
 	return mType;
-}
-
-void Symbol::printName()
-{
-	// Prints what name this symbol is to cout
-	cout << mRule->mLHS;
 }

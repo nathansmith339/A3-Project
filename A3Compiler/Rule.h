@@ -37,6 +37,7 @@
 
 
 #include "Token.h"
+#include "Symbol.h"
 #include <iostream>
 class Rule {
 public:
@@ -44,8 +45,8 @@ public:
 	~Rule();
 	//Rule(Symbol *lhs, int index, int kidcnt, int toktype);
 	
-	Symbol *mLHS;		// The NONT LHS
-	Symbol *mRHS[10];		// Expands into at most 10 rules
+//	Symbol mLHS;		// The NONT LHS
+//	Symbol mRHS[10];	// Expands into at most 10 rules
 	int mIndex;			// index position of rule in Grammar (class)
 	int mKids;			// number of kids for this rule (how big RHS is)
 	int mTokType;		// Token type for easy access

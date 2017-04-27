@@ -1,7 +1,5 @@
 // Token stub
 /* TODOs:
-	Parameterized Constructor
-	Getters/Setters
 	Utility Functions
 	...
 
@@ -9,6 +7,8 @@
 
 #pragma once
 #include "Symbol.h"
+#include <string>
+using std::string;
 
 #define comment 1
 #define ident 2
@@ -71,37 +71,25 @@
 #define t_eof 0
 
 class Token {
+public:
 	Token();
 	~Token();
-	// TODO: Parameterized Constructor
 
-
-	char mTokName[100];		// print name of the token
+	string mTokName;		// print name of the token's type
+	string mValue;			// token's value (if applicable)
 	int mType;				// type of the token, types in define
 
-	// TODO: Getters/Setters
-	int getTokenType();
-	void printTokName();
 	// TODO: Utility Functions
 
 
 };
 
 // implementation
-Token::Token() { }
+Token::Token()
+{
+	mTokName = "error";
+	mValue = "";
+	mType = error;
+}
 
 Token::~Token() { }
-
-int Token::getTokenType()
-{
-	// returns token's type
-	return mType;
-}
-
-void Token::printTokName()
-{
-	// prints token name to cout
-	int ix = 0;
-	while (mTokName[ix] != 0)
-		cout << mTokName[ix];
-}
