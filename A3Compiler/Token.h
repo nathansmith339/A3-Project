@@ -4,7 +4,8 @@
 	...
 
 */
-
+#ifndef TOKEN_H
+#define TOKEN_H
 #pragma once
 #include "Symbol.h"
 #include <string>
@@ -66,9 +67,13 @@ using std::string;
 #define opshl 56
 #define opshr 57
 
+
 // other
-#define error 99
+#define error 98
 #define t_eof 0
+#define dollar 58
+//#define kwdid 59
+#define eps   50
 
 class Token {
 public:
@@ -83,7 +88,7 @@ public:
 
 
 };
-
+#endif
 // implementation
 Token::Token()
 {

@@ -8,6 +8,8 @@ Utility Functions
 Add to main driver
 */
 
+#ifndef GRAMMAR_H
+#define GRAMMAR_H
 #include "Rule.h"
 class Grammar {
 	Grammar();
@@ -24,13 +26,11 @@ class Grammar {
 	// TODO: Utility Functions
 
 };
+#endif 
 
+Grammar::Grammar() {};
 
-Grammar::Grammar() 
-{};
-
-Grammar::~Grammar() 
-{};
+Grammar::~Grammar() {};
 
 Rule Grammar::getRule(int index)
 {

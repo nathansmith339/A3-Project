@@ -26,8 +26,10 @@
 	Else2 = kwdelse Block | eps
 	Elist = E Elist2 | eps
 	Elist2 = comma Elist
-	E = E Opadd T | T
-	T = T Opmul F | F
+	Ex = Opadd T Ex | eps
+	E = T Ex//=======lre
+	Tx = Opmul F Tx |eps
+	T = F Tx //=======lre
 	F = Fatom | Pexpr
 	Pexpr = paren1 E paren2
 	Fatom = id | int | float | string
@@ -35,40 +37,59 @@
 	Opmul = aster | slash | caret
 */
 
-
+#ifndef RULE_H
+#define RULE_H
 #include "Token.h"
 #include "Symbol.h"
 #include <iostream>
+
+class Symbol;
 class Rule {
 public:
-	Rule();
-	~Rule();
-	//Rule(Symbol *lhs, int index, int kidcnt, int toktype);
+	void setRule(int arule_ID, int alhs_sym_ID, int arhs_count, int arhs_sym_ID[]);
+	int get_rule_ID();
+	int get_lhs_sym_ID();
 	
-//	Symbol mLHS;		// The NONT LHS
-//	Symbol mRHS[10];	// Expands into at most 10 rules
-	int mIndex;			// index position of rule in Grammar (class)
-	int mKids;			// number of kids for this rule (how big RHS is)
-	int mTokType;		// Token type for easy access
+
+	~Rule();
+	Rule();
+//private:
+	int rule_ID;			//position of rule in the rule array
+	int lhs_sym_ID;			//postiion of LHS in symbol array
+	int rhs_sym_ID[10];		//position of RHS symbols in symbol array
+	int rhs_count;			//how many symbols are on the RHS
 
 
-	// TODO: Getters/Setters
+	// TODO: Getters/Setters DONE
 
 
 	// TODO: Utility Functions
 
 };
-
+#endif
 
 // Implementation
-Rule::Rule() {}
 
-Rule::~Rule() {}
+Rule::Rule() { }
+Rule::~Rule() { }
 
-//Rule::Rule(Symbol *lhs, int index, int kidcnt, int toktype)
-//{
-//	mLHS = lhs;
-//	mIndex = index;
-//	mKids = kidcnt;
-//	mTokType = toktype;
-//}
+void Rule::setRule(int arule_ID, int alhs_sym_ID, int arhs_count, int arhs_sym_ID[])
+{
+	//i left the rhs_sym_array our for ... reasons
+	rule_ID = arule_ID;
+	lhs_sym_ID = alhs_sym_ID;
+	rhs_count = arhs_count;
+	for(int i = 0; i < 10; i++){
+		rhs_sym_ID[i] = arhs_sym_ID[i];
+	}
+		
+
+}
+int Rule::get_rule_ID()
+{
+	return rule_ID;
+}
+int Rule::get_lhs_sym_ID()
+{
+	return lhs_sym_ID;
+}

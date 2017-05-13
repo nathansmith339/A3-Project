@@ -11,44 +11,53 @@
 */
 
 #pragma once
+#ifndef NODE_H
+#define NODE_H
 #include "Symbol.h"
 
-class Node {
-	Node();
-	~Node();
-	// TODO: Parameterized Constructor
-
-	Symbol *mSymbol;		// Symbol object pointer
-	Node* mKids[10];		// Array of child nodes, 1-indexed (zero not used)
-	int mKidCnt;			// Number of child nodes
-
-	// TODO: Getters/Setters
-	int getSymbolType();
-	Node* getKid(int index);
-	bool addKid(Node* kid)
-
-	// TODO: Utility Functions
-
-
+class Symbol;
+class Nodes {
+public:
+	Nodes(Nodes *a, int asym_id, int akid_count) // new shit
+	{
+		kid_count = akid_count;
+		sym_ID = asym_id;
+		curr = a;
+	}
+	void setNode(int asym_ID, int akid_count);
+	int get_sym_ID();
+	int get_kid_count();
+	Nodes();
+	~Nodes();
+//private:
+	int sym_ID;		//position of symbol in symbol array
+	Nodes *kids[10];	//pointer array that points to children
+	int kid_count;	//how many kids node has
+	Nodes *curr;
 };
-
+#endif 
 // implementation
-Node::Node() { }
+Nodes::Nodes() { }
 
-Node::~Node() { }
+Nodes::~Nodes() { }
 
-int Node::getSymbolType() 
+void Nodes::setNode(int aasym_ID, int akid_count)
 {
-	// Returns TERM (0) or NONT (1)
-	return mSymbol->getType();
+	sym_ID = aasym_ID;		//position of symbol in symbol array
+	kid_count = akid_count; //kid count
+	//possibly set kidcount to zero?
 }
-
-Node* Node::getKid(int index)
+int Nodes::get_sym_ID()
 {
-	// Returns kid at specified index
-	return mKids[index];
+	//position of symbol in symbol array
+	return sym_ID;
 }
-
+int Nodes::get_kid_count()
+{
+	//how many kids node has0
+	return kid_count;
+}
+/**
 bool Node::addKid(Node* kid) 
 {
 	// Adds kid to current node at next available spot, returns true if successful
@@ -64,3 +73,4 @@ bool Node::addKid(Node* kid)
 		return true;
 	}
 }
+**/
