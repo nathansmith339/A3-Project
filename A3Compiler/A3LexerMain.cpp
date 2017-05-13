@@ -337,6 +337,7 @@ int lookup(char ch)
 	return 0;
 }
 
+/*
 int lex()
 {
 	bool float_point = false;
@@ -387,6 +388,7 @@ int lex()
 			}
 			CurrentToken->mTokName = "ident";
 			CurrentToken->mValue = lexeme;
+			CurrentToken->mType = ident;
 			printf("(:token %d ident :str \"%s\")\n", lineCount, lexeme);
 		}
 		getChar();
@@ -619,7 +621,290 @@ int lex()
 	}
 	return 1;  // return success
 }
+*/
+int lex()
+{
+	bool float_point = false;
+	lexLength = 0;
+	skipBlanks();
+	switch (charClass)
+	{
+	case LETTER:
+		// possibilities: ident, kwd
+		while (charClass != UNKNOWN && charClass != EOF)
+		{
+			if (charClass != UNKNOWN && charClass != EOF)
+			{
+				addChar();
+				peekNext();
+				if (isEnd(peekedChar))
+				{
+					// must be end of "word"
+					break;
+				}
+			}
+			// otherwise get next char
+			getChar();
 
+			// allows underscore into identifier
+			if (nextChar == '_')
+			{
+				addChar();
+				getChar();
+			}
+		}
+
+		// Determine type of letter token: keyword or identifier
+		// is this a keyword?
+		if (isKWD())
+		{
+			CurrentToken->mTokName = string("kwd").append(lexeme);  // similar to: "kwd" + "prog"
+			printf("(:token %d kwd%s)\n", lineCount, lexeme);
+		}
+		else	// an identifier
+		{
+			// however, "_" is NOT an identifier
+			if (!strncmp(lexeme, "_", lexLength))
+			{
+				errorString[0] = '_';
+				errorString[1] = 0;
+				return 0;
+			}
+			CurrentToken->mTokName = "ident";
+			CurrentToken->mValue = lexeme;
+			CurrentToken->mType = ident;
+			printf("(:token %d ident :str \"%s\")\n", lineCount, lexeme);
+		}
+		getChar();
+
+
+		return 1;
+		break;
+
+	case DIGIT:
+		// possibilities: t_int, t_float
+		lexLength = 0;
+		float_point = false;
+		CurrentToken->mType = t_int;
+		while (charClass == DIGIT || lookup(nextChar) == dot)
+		{
+			// ensure only digits/dots are added
+			if (charClass == DIGIT || lookup(nextChar) == dot)
+			{
+				if (nextChar == '.')			// floating point picked up
+				{
+					if (float_point == false)	// determine if token is int or float
+					{
+						CurrentToken->mType = t_float;	// add floating point and toggle
+						addChar();
+						getChar();
+						float_point = true;
+						continue;				// floating point shouldn't be the end
+					}
+					else						// look pal, you can't have two floating points
+					{
+						CurrentToken->mType = error;
+						errorString[0] = nextChar;
+						errorString[1] = 0;
+						return 0;
+					}
+				}
+				else
+				{
+					// char is a digit
+					addChar();
+				}
+			}
+
+			// check for end of number
+			peekNext();
+			if (peekClass == UNKNOWN && !isEnd(peekedChar))
+			{
+				// not sure what peeked char is
+				errorString[0] = peekedChar;
+				return 0;
+			}
+			else if (isEnd(peekedChar) && peekClass != FLTPT)
+			{
+				// end of token
+				break;
+			}
+
+			getChar();
+		}
+
+		CurrentToken->mValue = lexeme;		// puts found lexeme value into token
+		CurrentToken->mTokName = "t_float";	// swapped to "int" if type is int
+
+											// Type identification: int or float
+		if (CurrentToken->mType != t_float)
+		{
+			CurrentToken->mTokName = "t_int";
+			printf("(:token %d int :str \"%s\")\n", lineCount, lexeme);
+		}
+		else
+		{
+			printf("(:token %d float :str \"%s\")\n", lineCount, lexeme);
+		}
+		getChar();
+		break;
+
+	case UNKNOWN:
+		// possibilities: comment, t_string, comma, semi, delimiter, punct, other
+		CurrentToken->mType = lookup(nextChar);
+		if (CurrentToken->mType == error)
+		{
+			errorString[0] = nextChar;
+			errorString[1] = 0;
+			return 0;
+		}
+
+		switch (CurrentToken->mType)
+		{
+		case comment:
+			// skip over comment
+			while (nextChar != '\n')
+				getChar();
+			return 1;
+			break;
+
+		case t_string:
+			// try to find beginning and end
+			getChar(); // ignore first '"'
+			while (nextChar != '"')
+			{
+				addChar();
+				getChar();
+			}
+			CurrentToken->mValue = lexeme;
+			CurrentToken->mTokName = "t_string";
+			printf("(:token %d string :str \"%s\")\n", lineCount, lexeme);
+			getChar(); // ignore last '"'
+			return 1;
+			break;
+
+			// single-char delims
+		case comma:
+			addChar();
+			break;
+
+		case semi:
+			addChar();
+			break;
+
+		case angle1:
+			addChar();
+			break;
+
+		case angle2:
+			addChar();
+			break;
+
+		case bracket1:
+			addChar();
+			break;
+
+		case bracket2:
+			addChar();
+			break;
+
+		case parens1:
+			addChar();
+			break;
+
+		case parens2:
+			addChar();
+			break;
+
+		case aster:
+			addChar();
+			break;
+
+		case caret:
+			addChar();
+			break;
+
+		case colon:
+			addChar();
+			break;
+
+		case dot:
+			addChar();
+			break;
+
+		case equal:
+			addChar();
+			break;
+
+			// multi-char delims
+		case oparrow:
+			addChar(); // add -
+			getChar();
+			addChar(); // add >
+			break;
+
+		case opeq:
+			addChar(); // add =
+			getChar();
+			addChar(); // add =
+			break;
+
+		case opne:
+			addChar(); // add !
+			getChar();
+			addChar(); // add =
+			break;
+
+		case ople:
+			addChar(); // add <
+			getChar();
+			addChar(); // add =
+			break;
+
+		case opge:
+			addChar(); // add >
+			getChar();
+			addChar(); // add =
+			break;
+
+		case opshl:
+			addChar(); // add <
+			getChar();
+			addChar(); // add <
+			break;
+
+		case opshr:
+			addChar(); // add >
+			getChar();
+			addChar(); // add >
+			break;
+		}
+
+		// ensure end of token
+		peekNext();
+		if (isEnd(peekedChar) || isalnum(peekedChar) || peekClass == EOF || peekClass == SPC)
+		{
+			//lookup(nextChar);
+			if (CurrentToken->mType != t_string)
+			{
+				// This is a special case to check before confirming lexeme, we have to update the lexeme now
+				strncpy_s(lexeme, CurrentToken->mTokName.c_str(), _TRUNCATE);
+				printf("(:token %d %s)\n", lineCount, CurrentToken->mTokName.c_str());
+			}
+		}
+		else
+		{
+			// if end of token isn't there, there's something wrong
+			CurrentToken->mType = error;
+			errorString[0] = nextChar;
+			errorString[1] = 0;
+			return 0;
+		}
+		getChar();
+		break;
+	}
+	return 1;  // return success
+}
 bool isKWD()
 {
 	CurrentToken->mType = error;
